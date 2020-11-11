@@ -47,14 +47,28 @@ bytevec gao(const string& path_str, compressor comp, cryptor crypt, uint64_t key
     vector<string> files = get_file(path_str);
     bytevec packed_data = pack(files);
     compressed_data = comp.compress(packed_data);
-    encrypted_data = crypt.encrypt(compressed_data);
+    encrypted_data = crypt.encrypt(compressed_data, key);
     return encrypted_data;
 }
 
-void ungao(const string& path_str, const bytevec& encrypted_data, compressor comp, cryptor crypt, uint64_t key) {
-    bytevec decrypted_data = crypt.decrypt(encrypted_data);
-    bytevec decompressed_data = comp.decompress(decrypted_data);
-   	unpack(decompressed_data);
+int ungao(const string& path_str, const bytevec& encrypted_data, compressor comp, cryptor crypt, uint64_t key) {
+    try {
+        bytevec decrypted_data = crypt.decrypt(encrypted_data, key);
+        bytevec decompressed_data = comp.decompress(decrypted_data);
+        unpack(decompressed_data);
+    }
+    catch (decrypt_failed) {
+        
+    }
+    catch (decompress_failed) {
+        
+    }
+    catch (unpack_failed) {
+        
+    }
+    catch (...) {
+        
+    }
 }
 ```
 
@@ -62,7 +76,7 @@ void ungao(const string& path_str, const bytevec& encrypted_data, compressor com
 
 `vector<string>& get_file(const string& path_str)`：若`path`是一个目录，则收集其每个子文件的路径并返回。否则直接返回仅包含该路径的`vector`。
 
-`bytevec pack(const vector<string>& path_str_v)`将`arg`中所有文件按二进制流打包成一个字节串，并记录了目录结构信息。
+`bytevec pack(const vector<string>& path_str_v)`将`arg`中所有文件按二进制流打包成一个字节串，并记录目录结构信息在其开头。
 
 `void unpack(const string& path, const bytevec& data)`将字节串`data`中的结构信息解包后将文件解压至根目录`path`下。
 
