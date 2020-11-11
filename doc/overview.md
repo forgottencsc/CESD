@@ -1,3 +1,5 @@
+# Comprehensive Experiment of Software Development
+
 ## Overview
 
 模块：
@@ -10,56 +12,96 @@ Encrypt：字节串的加密与解密与验证。
 
 Web：将字节串发送至服务器端。
 
-## Main
+## Gao
 
 流程：
 
-`bytevec backup(const string& path_str)`
+```mermaid
+graph LR;
 
-将`path_str`指向的东西压成一个字节串，即
+FSI(Filesystem Input)
 
-`void ungao(const string& path_str, const bytevec& data)`
+FSO(Filesystem Output)
 
-将`data`里的东西释放至`path_str`下。
+Cmp(Compress)
+Cry(Cryptor)
+Pak(Package)
+
+FSI --> Pak
+
+subgraph Gao
+
+Pak --> Cmp-->Cry
+
+end
+
+Cry --> FSO
+
+
+```
 
 ```cpp
 typedef vector<uint8_t> bytevec;
 
-bytevec gao(const string& path_str,) {
-    bytevec pack_data = pack(path_str);
-    
-    
+bytevec gao(const string& path_str, compressor comp, cryptor crypt, uint64_t key) {
+    vector<string> files = get_file(path_str);
+    bytevec packed_data = pack(files);
+    compressed_data = comp.compress(packed_data);
+    encrypted_data = crypt.encrypt(compressed_data);
+    return encrypted_data;
 }
 
-void ungao(const string& path_str, const bytevec& data) {
-    
-    
+void ungao(const string& path_str, const bytevec& encrypted_data, compressor comp, cryptor crypt, uint64_t key) {
+    bytevec decrypted_data = crypt.decrypt(encrypted_data);
+    bytevec decompressed_data = comp.decompress(decrypted_data);
+   	unpack(decompressed_data);
 }
-```
-
-## Compress
-
-```cpp
-bytevec compress(const bytevec& data);
-bytevec decompress(const bytevec& data);
 ```
 
 ## Package
 
-定义
+`vector<string>& get_file(const string& path_str)`：若`path`是一个目录，则收集其每个子文件的路径并返回。否则直接返回仅包含该路径的`vector`。
+
+`bytevec pack(const vector<string>& path_str_v)`将`arg`中所有文件按二进制流打包成一个字节串，并记录了目录结构信息。
+
+`void unpack(const string& path, const bytevec& data)`将字节串`data`中的结构信息解包后将文件解压至根目录`path`下。
 
 ```cpp
-bytevec pack(const string& path_str);
-void unpack(const string& path_str, const bytevec& data);
+vector<string>& get_file(const string& path_str);
+bytevec pack(const vector<string>& path_str_v);
+void unpack(const string& path, const bytevec& data);
+```
+
+## Compress
+
+基类`class compressor`
+
+其子类实现了某种压缩算法的压缩/解压缩。
+
+`class not_a_compressor`：不进行压缩，原样返回。
+
+`class huffman_compressor`：使用Huffman编码进行压缩。
+
+```cpp
+class compressor {
+public:
+    bytevec compress(const bytevec& data);
+    bytevec decompress(const bytevec& data);
+};
+
+class not_a_compressor : public compressor;
+class huffman_compressor : public compressor;
 ```
 
 ## Encrypt
 
-`class cryptor`是一个接口，其子类实现了某种加密方法的加密/解密/验证。
+基类`class cryptor`
 
-encrypt将key的md5值放在data首部。
+其子类实现了某种加密算法的加密/解密/验证。
 
-decrypt计算key的md5值与data首部的md5值比较，若失败则抛出异常。
+`encrypt`将key的md5值放在data首部。
+
+`decrypt`计算key的md5值与data首部的md5值比较，若失败则抛出异常。
 
 ```cpp
 class cryptor {
