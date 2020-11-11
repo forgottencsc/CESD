@@ -46,8 +46,8 @@ typedef vector<uint8_t> bytevec;
 bytevec gao(const string& path_str, compressor comp, cryptor crypt, uint64_t key) {
     vector<string> files = get_file(path_str);
     bytevec packed_data = pack(files);
-    compressed_data = comp.compress(packed_data);
-    encrypted_data = crypt.encrypt(compressed_data, key);
+    bytevec compressed_data = comp.compress(packed_data);
+    bytevec encrypted_data = crypt.encrypt(compressed_data, key);
     return encrypted_data;
 }
 
