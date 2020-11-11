@@ -1,6 +1,6 @@
 # Comprehensive Experiment of Software Development
 
-## Overview
+## Client
 
 模块：
 
@@ -11,6 +11,10 @@ Package：将一堆东西压成字节串和将字节串。
 Encrypt：字节串的加密与解密与验证。
 
 Web：将字节串发送至服务器端。
+
+## Server
+
+Web：收发字节串。
 
 ## Gao
 
@@ -43,7 +47,7 @@ Cry --> FSO
 ```cpp
 typedef vector<uint8_t> bytevec;
 
-bytevec gao(const string& path_str, compressor comp, cryptor crypt, uint64_t key) {
+bytevec gao(const string& path_str, compressor comp, cryptor crypt) {
     vector<string> files = get_file(path_str);
     bytevec packed_data = pack(files);
     bytevec compressed_data = comp.compress(packed_data);
@@ -51,7 +55,7 @@ bytevec gao(const string& path_str, compressor comp, cryptor crypt, uint64_t key
     return encrypted_data;
 }
 
-int ungao(const string& path_str, const bytevec& encrypted_data, compressor comp, cryptor crypt, uint64_t key) {
+int ungao(const string& path_str, const bytevec& encrypted_data, compressor comp, cryptor crypt) {
     try {
         bytevec decrypted_data = crypt.decrypt(encrypted_data, key);
         bytevec decompressed_data = comp.decompress(decrypted_data);
@@ -96,6 +100,8 @@ void unpack(const string& path, const bytevec& data);
 
 `class huffman_compressor`：使用Huffman编码进行压缩。
 
+构造需要接受从UI传过来的参数。
+
 ```cpp
 class compressor {
 public:
@@ -117,11 +123,14 @@ class huffman_compressor : public compressor;
 
 `decrypt`计算key的md5值与data首部的md5值比较，若失败则抛出异常。
 
+构造需要接受UI传过来的参数。
+
 ```cpp
 class cryptor {
 public:
-    bytevec encrypt(const bytevec& data, uint64_t key);
-    bytevec decrypt(const bytevec& data, uint64_t key);
+    cryptor(uint64_t key);
+    bytevec encrypt(const bytevec& data);
+    bytevec decrypt(const bytevec& data);
 };
 
 class xor_cryptor : public cryptor;
