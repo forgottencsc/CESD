@@ -90,7 +90,7 @@ bytevec pack(const vector<string>& path_str_v);
 void unpack(const string& path, const bytevec& data);
 ```
 
-## Compress
+## Compress5
 
 基类`class compressor`
 
