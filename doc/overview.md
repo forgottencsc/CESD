@@ -47,7 +47,7 @@ Cry --> FSO
 ```cpp
 typedef vector<uint8_t> bytevec;
 
-bytevec gao(const string& path_str, compressor comp, cryptor crypt) {
+bytevec gao(const string& path_str, const compressor& comp, const cryptor& crypt) {
     vector<string> files = get_file(path_str);
     bytevec packed_data = pack(files);
     bytevec compressed_data = comp.compress(packed_data);
@@ -55,7 +55,7 @@ bytevec gao(const string& path_str, compressor comp, cryptor crypt) {
     return encrypted_data;
 }
 
-int ungao(const string& path_str, const bytevec& encrypted_data, compressor comp, cryptor crypt) {
+int ungao(const string& path_str, const bytevec& encrypted_data, const compressor& comp, const cryptor& crypt) {
     try {
         bytevec decrypted_data = crypt.decrypt(encrypted_data, key);
         bytevec decompressed_data = comp.decompress(decrypted_data);
@@ -90,7 +90,7 @@ bytevec pack(const vector<string>& path_str_v);
 void unpack(const string& path, const bytevec& data);
 ```
 
-## Compress5
+## Compress
 
 基类`class compressor`
 
@@ -105,8 +105,8 @@ void unpack(const string& path, const bytevec& data);
 ```cpp
 class compressor {
 public:
-    bytevec compress(const bytevec& data);
-    bytevec decompress(const bytevec& data);
+    virtual bytevec compress(const bytevec& data);
+    virtual bytevec decompress(const bytevec& data);
 };
 
 class not_a_compressor : public compressor;
@@ -129,8 +129,8 @@ class huffman_compressor : public compressor;
 class cryptor {
 public:
     cryptor(uint64_t key);
-    bytevec encrypt(const bytevec& data);
-    bytevec decrypt(const bytevec& data);
+    virtual bytevec encrypt(const bytevec& data);
+    virtual bytevec decrypt(const bytevec& data);
 };
 
 class xor_cryptor : public cryptor;
