@@ -1,11 +1,15 @@
-#include "common.hpp"
-
+#include <bits/stdc++.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <experimental/filesystem>
 
 namespace pack{
 
 
 using namespace std;
 using namespace experimental::filesystem;
+typedef std::vector<uint16_t> bytevec;
+typedef unsigned int uint;
 const int NUMLEN = 2;
 const int TAGLEN = 1;
 bytevec itob32(uint x) {
