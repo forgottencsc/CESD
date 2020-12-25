@@ -45,17 +45,16 @@ Cry --> FSO
 ```
 
 ```cpp
-typedef vector<uint8_t> bytevec;
+typedef vector<uint16_t> bytevec;
 
-bytevec gao(const string& path_str, const compressor& comp, const cryptor& crypt) {
-    vector<string> files = get_file(path_str);
-    bytevec packed_data = pack(files);
+bytevec gao(const wstring& path_str, const compressor& comp, const cryptor& crypt) {
+    bytevec packed_data = pack(path_str);
     bytevec compressed_data = comp.compress(packed_data);
     bytevec encrypted_data = crypt.encrypt(compressed_data, key);
     return encrypted_data;
 }
 
-int ungao(const string& path_str, const bytevec& encrypted_data, const compressor& comp, const cryptor& crypt) {
+int ungao(const wstring& path_str, const bytevec& encrypted_data, const compressor& comp, const cryptor& crypt) {
     try {
         bytevec decrypted_data = crypt.decrypt(encrypted_data, key);
         bytevec decompressed_data = comp.decompress(decrypted_data);
@@ -78,16 +77,14 @@ int ungao(const string& path_str, const bytevec& encrypted_data, const compresso
 
 ## Package
 
-`vector<string>& get_file(const string& path_str)`：若`path`是一个目录，则收集其每个子文件的路径并返回。否则直接返回仅包含该路径的`vector`。
 
-`bytevec pack(const vector<string>& path_str_v)`将`arg`中所有文件按二进制流打包成一个字节串，并记录目录结构信息在其开头。
+`bytevec pack(const wstring& path_str)`将`path_str`及其内所有文件（如果有）按二进制流打包成一个字节串，并记录目录结构信息在其开头。
 
-`void unpack(const string& path, const bytevec& data)`将字节串`data`中的结构信息解包后将文件解压至根目录`path`下。
+`void unpack(const wstring& path, const bytevec& data)`将字节串`data`中的结构信息解包后将文件解压至根目录`path`下。
 
 ```cpp
-vector<string>& get_file(const string& path_str);
-bytevec pack(const vector<string>& path_str_v);
-void unpack(const string& path, const bytevec& data);
+bytevec pack(const wstring& path_str);
+void unpack(const wstring& path, const bytevec& data);
 ```
 
 ## Compress
