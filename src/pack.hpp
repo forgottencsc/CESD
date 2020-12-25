@@ -1,3 +1,6 @@
+#ifndef PACK_HPP
+#define PACK_HPP
+
 #include <bits/stdc++.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -167,3 +170,5 @@ void unpack(const wstring &path_str, const bytevec& data) {
 }
 
 };
+
+#endif
