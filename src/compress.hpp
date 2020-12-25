@@ -1,7 +1,6 @@
 #ifndef COMPRESS_HPP
 #define COMPRESS_HPP
 #include "common.hpp"
-#include <bits/stdc++.h>
 
 namespace compress {
 using namespace std;
@@ -195,5 +194,10 @@ public:
 };
 
 }
+
+using compress::compressor;
+using compress::huffman_compessor;
+using compress::not_a_compressor;
+
 #endif
 
