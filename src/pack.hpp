@@ -1,11 +1,11 @@
-#include <bits/stdc++.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <experimental/filesystem>
+#include "common.hpp"
+
+
+namespace pack{
+
+
 using namespace std;
 using namespace experimental::filesystem;
-typedef vector<uint16_t> bytevec;
-typedef unsigned int uint;
 const int NUMLEN = 2;
 const int TAGLEN = 1;
 bytevec itob32(uint x) {
@@ -162,12 +162,4 @@ void unpack(const wstring &path_str, const bytevec& data) {
     }
 }
 
-int main() {
-    wstring path_str; wcin >> path_str;
-    bytevec packed_data = pack(path_str);
-
-    // wstring p = L"";
-    // unpack(p, packed_data);
-    
-    return 0;
-}
+};
