@@ -1,4 +1,6 @@
-#include <bits/stdc++.h>
+#ifndef PACK_HPP
+#define PACK_HPP
+#include "common.hpp"
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <experimental/filesystem>
@@ -166,4 +168,9 @@ void unpack(const wstring &path_str, const bytevec& data) {
     }
 }
 
-};
+}
+
+using pack::pack;
+using pack::unpack;
+
+#endif
