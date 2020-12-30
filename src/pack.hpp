@@ -10,8 +10,8 @@ namespace pack{
 
 using namespace std;
 using namespace experimental::filesystem;
-typedef std::vector<uint16_t> bytevec;
-typedef unsigned int uint;
+// typedef std::vector<uint16_t> bytevec;
+// typedef unsigned int uint;
 const int NUMLEN = 2;
 const int TAGLEN = 1;
 bytevec itob32(uint x) {
@@ -48,17 +48,6 @@ wstring subwstr(const wstring& s, const uint& first, const uint& last) {
     return res;
 }
 
-bytevec getcontent(ifstream &in) {
-    bytevec bdata;
-    while (!in.eof()) {
-        char byte; in.get(byte);
-        if (in.eof()) break;
-        bdata.push_back(byte);
-    }
-    return bdata;
-}
-
-
 bytevec pack(const wstring& path_str) {
     bytevec packed_data;
     vector<path>files;
@@ -89,7 +78,7 @@ bytevec pack(const wstring& path_str) {
         else {
             packed_data.push_back(L'0');
             ifstream fin(u.string().c_str(), ios::binary);
-            bytevec file_content = getcontent(fin);
+            bytevec file_content = readfile(fin);
             fin.close();
             bytevec content_len = itob32(file_content.size());
             packed_data.insert(packed_data.end(), content_len.begin(), content_len.end());
@@ -157,9 +146,8 @@ void unpack(const wstring &path_str, const bytevec& data) {
             else {
                 ofstream fout(dir_path.string(), ios::binary);
                 bytevec content = get_content();
-                for (auto c: content) {
-                    fout.put(c);
-                }
+                writefile(fout, content);
+                
                 fout.close();
             }
             uint v_sz = get_sonnum();
