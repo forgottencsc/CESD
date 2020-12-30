@@ -5,8 +5,7 @@
 #include <sys/types.h>
 #include <experimental/filesystem>
 
-namespace pack{
-
+namespace pack {
 
 using namespace std;
 using namespace experimental::filesystem;
@@ -157,8 +156,5 @@ void unpack(const wstring &path_str, const bytevec& data) {
 }
 
 }
-
-using pack::pack;
-using pack::unpack;
 
 #endif

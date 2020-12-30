@@ -45,8 +45,6 @@ Cry --> FSO
 ```
 
 ```cpp
-typedef vector<uint16_t> bytevec;
-
 bytevec gao(const wstring& path_str, const compressor& comp, const cryptor& crypt) {
     bytevec packed_data = pack(path_str);
     bytevec compressed_data = comp.compress(packed_data);
