@@ -23,25 +23,27 @@ using std::pair;
 using std::swap;
 using std::priority_queue;
 
+using std::istream;
+using std::ostream;
 using std::ifstream;
 using std::ofstream;
 
 typedef vector<uint16_t> bytevec;
 
-bytevec readfile(ifstream& in) {
+bytevec readfile(istream& in) {
     bytevec bdata;
-    while (!in.eof()) {
-        char byte; in.get(byte);
-        if (in.eof()) break;
-        bdata.push_back(byte);
+    const size_t sz = 1<<10;
+    array<uint16_t, sz> buf;
+    size_t len;
+    while (len = in.readsome(reinterpret_cast<char*>(buf.data()), sz * 2)) {
+        for (int i = 0; i < len; i += 2)
+            bdata.push_back(buf[i >> 1]);
     }
     return bdata;
 }
 
-void writefile(ofstream& out, const bytevec& vec) {
-    for (auto c: vec) {
-        out.put(c);
-    }
+void writefile(ostream& out, const bytevec& vec) {
+    out.write(reinterpret_cast<const char*>(vec.data()), vec.size() * 2);
 }
 
 
