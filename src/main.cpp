@@ -9,8 +9,8 @@ int main(void) {
     wcin >> path;
     huffman_compessor c;
     xorplus_cryptor x(key);
-    auto a = gao::gao(p1, c, x);
-    gao::ungao(p2, a, c, x);
+    //auto a = gao::gao(p1, c, x);
+    //gao::ungao(p2, a, c, x);
 
     return 0;
 }
