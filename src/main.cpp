@@ -3,14 +3,34 @@
 
 using namespace std;
 
-int main(void) {
-    uint64_t key = 1145141919810810810;
-    wstring path;
-    wcin >> path;
-    huffman_compessor c;
-    xorplus_cryptor x(key);
-    //auto a = gao::gao(p1, c, x);
-    //gao::ungao(p2, a, c, x);
+using namespace std::string_literals;
 
+using std::experimental::filesystem::path;
+
+int main(void) {
+    uint64_t key;
+    wstring type, ipath, opath;
+    wcin >> type;
+
+    if (type == L"compress") {
+        wcin >> ipath >> key >> opath;
+        huffman_compessor c;
+        xorplus_cryptor x(key);
+        ofstream ofs(path(opath).string(), std::ios::binary);
+        detail::writefile(ofs, gao::gao(ipath, c, x));
+        ofs.close();
+    }
+    else if (type == L"decompress") {
+        wcin >> ipath >> key >> opath;
+        huffman_compessor c;
+        xorplus_cryptor x(key);
+        ifstream ifs(path(ipath).string(), std::ios::binary);
+        gao::ungao(opath, detail::readfile(ifs), c, x);
+        ifs.close();
+    }
+    else {
+        cout << "Usage: <type> <ipath> <key> <opath>" << endl;
+    }
+        
     return 0;
 }

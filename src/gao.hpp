@@ -18,19 +18,19 @@ bytevec gao(const wstring& path_str, const compressor& comp, const cryptor& cryp
 }
 
 int ungao(const wstring& path_str, const bytevec& encrypted_data, const compressor& comp, const cryptor& crypt) {
-    try {
+    //try {
         bytevec decrypted_data = crypt.decrypt(encrypted_data);
         bytevec decompressed_data = comp.decompress(decrypted_data);
         pack::unpack(path_str, decompressed_data);
-    }
-    catch (std::runtime_error e) {
-        if (e.what() == encrypt::decrypt_failed_str)
-            ;
-        //if (e.what() ==)
-    }
-    catch (std::exception e) {
-        //cerr << e.what() << endl;
-    }
+    //}
+    // catch (std::runtime_error e) {
+    //     if (e.what() == encrypt::decrypt_failed_str)
+    //         ;
+    //     //if (e.what() ==)
+    // }
+    // catch (std::exception e) {
+    //     std::cerr << e.what() << std::endl;
+    // }
     return 0;
 }
 
