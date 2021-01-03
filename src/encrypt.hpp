@@ -90,7 +90,7 @@ public:
             throw std::runtime_error(decrypt_failed_str);
         int c = 0;
         while (!is.eof()) {
-            uint8_t f1 = h >> ((c & 7) << 3), f2 = h >> (((c + 2) & 7) << 3);
+            uint8_t f1 = h >> ((c & 7) << 3), f2 = h >> (((c + 4) & 7) << 3);
             b.push_back((is.geti<uint8_t>() - f2) ^ f1);
         }
         return b;
