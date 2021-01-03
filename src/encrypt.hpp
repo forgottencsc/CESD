@@ -100,6 +100,7 @@ public:
 }
 
 using encrypt::cryptor;
+using encrypt::not_a_cryptor;
 using encrypt::xorplus_cryptor;
 
 #endif
