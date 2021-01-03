@@ -11,6 +11,7 @@ namespace pack {
 typedef std::vector<uint8_t> bytevec;
 typedef unsigned int uint;
 using namespace std;
+using namespace detail;
 
 const int NUMLEN = 4;
 const int TAGLEN = 1;
@@ -40,22 +41,6 @@ bytevec subvec(const bytevec& vec, const uint& first, const uint& last) {
         res.push_back(*it);
     }
     return res;
-}
-
-bytevec readfile(istream& in) {
-    bytevec bdata;
-    const size_t sz = 1<<10;
-    array<uint8_t, sz> buf;
-    size_t len;
-    while (len = in.readsome(reinterpret_cast<char*>(buf.data()), sz)) {
-        for (int i = 0; i < len; i ++)
-            bdata.push_back(buf[i]);
-    }
-    return bdata;
-}
-
-void writefile(ostream& out, const bytevec& vec) {
-    out.write(reinterpret_cast<const char*>(vec.data()), vec.size());
 }
 
 bytevec pack(const string& path_str) {
