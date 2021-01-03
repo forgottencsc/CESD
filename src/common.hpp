@@ -28,12 +28,12 @@ using std::ostream;
 using std::ifstream;
 using std::ofstream;
 
-typedef vector<uint16_t> bytevec;
+typedef vector<uint8_t> bytevec;
 
 bytevec readfile(istream& in) {
     bytevec bdata;
     const size_t sz = 1<<10;
-    array<uint16_t, sz> buf;
+    array<uint8_t, sz> buf;
     size_t len;
     while (len = in.readsome(reinterpret_cast<char*>(buf.data()), sz * 2)) {
         for (int i = 0; i < len; i += 2)

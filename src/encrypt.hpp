@@ -74,9 +74,9 @@ public:
         uint64_t h = cal_hash(k);
         os.puti<uint64_t>(cal_hash(h));
         int c = 0;
-        for (const uint16_t& v : data) {
-            uint16_t f1 = h >> ((c & 3) << 4), f2 = h >> ((((c + 2) & 3)) << 4);
-            os.puti<uint16_t>((v ^ f1) + f2);
+        for (const uint8_t& v : data) {
+            uint8_t f1 = h >> ((c & 7) << 3), f2 = h >> (((c + 4) & 7) << 3);
+            os.puti<uint8_t>((v ^ f1) + f2);
         }
         os.flush();
         return b;
@@ -90,8 +90,8 @@ public:
             throw std::runtime_error(decrypt_failed_str);
         int c = 0;
         while (!is.eof()) {
-            uint16_t f1 = h >> ((c & 3) << 4), f2 = h >> ((((c + 2) & 3)) << 4);
-            b.push_back((is.geti<uint16_t>() - f2) ^ f1);
+            uint8_t f1 = h >> ((c & 7) << 3), f2 = h >> (((c + 2) & 7) << 3);
+            b.push_back((is.geti<uint8_t>() - f2) ^ f1);
         }
         return b;
     }
