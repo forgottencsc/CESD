@@ -36,8 +36,8 @@ bytevec readfile(istream& in) {
     array<uint8_t, sz> buf;
     size_t len;
     while (len = in.readsome(reinterpret_cast<char*>(buf.data()), sz)) {
-        for (int i = 0; i < len; i += 2)
-            bdata.push_back(buf[i >> 1]);
+        for (int i = 0; i < len; i ++)
+            bdata.push_back(buf[i]);
     }
     return bdata;
 }
