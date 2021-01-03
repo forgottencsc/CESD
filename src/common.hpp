@@ -35,7 +35,7 @@ bytevec readfile(istream& in) {
     const size_t sz = 1<<10;
     array<uint8_t, sz> buf;
     size_t len;
-    while (len = in.readsome(reinterpret_cast<char*>(buf.data()), sz * 2)) {
+    while (len = in.readsome(reinterpret_cast<char*>(buf.data()), sz)) {
         for (int i = 0; i < len; i += 2)
             bdata.push_back(buf[i >> 1]);
     }
@@ -43,7 +43,7 @@ bytevec readfile(istream& in) {
 }
 
 void writefile(ostream& out, const bytevec& vec) {
-    out.write(reinterpret_cast<const char*>(vec.data()), vec.size() * 2);
+    out.write(reinterpret_cast<const char*>(vec.data()), vec.size());
 }
 
 
