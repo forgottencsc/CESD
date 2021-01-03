@@ -13,7 +13,7 @@ using std::string;
 class obitstream {
 public:
     bytevec& v;
-    uint16_t b, t;
+    uint8_t b, t;
     size_t c;
     obitstream(bytevec& v_) : v(v_), b(0), t(1), c(0) {}
 
@@ -45,11 +45,9 @@ public:
             put(ch == '1');
     }
 
-    uint16_t flush() {
-        uint16_t res = c + __builtin_ctz(t);
+    void flush() {
         if (t != 1) v.push_back(b);
         t = 0;
-        return res;
     }
 
 };
@@ -57,7 +55,7 @@ public:
 class ibitstream {
 public:
     const bytevec& v;
-    uint16_t t;
+    uint8_t t;
     size_t i, c;
 
     void reset() {
@@ -69,7 +67,6 @@ public:
     ibitstream(const bytevec& v_) : v(v_) { reset(); }
 
     ~ibitstream() {}
-
 
     bool eof() {
         return i == v.size();
@@ -91,8 +88,7 @@ public:
         static_assert(std::is_integral<I>::value);
         I res = 0;
         for (int x = 0; x < 8 * sizeof(I); ++x)
-            if (get())
-                res |= ((I)1 << x);
+            res |= ((I)get() << x);
         return res;
     }
 
