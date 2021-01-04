@@ -7,7 +7,6 @@ using namespace detail;
 
 int main(void) {
     uint64_t key;
-
     string type, ipath, opath;
     cin >> type;
 
