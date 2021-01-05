@@ -94,6 +94,8 @@ string verify(const bytevec& data, const string& path_str) {
     else {
         lb = path_str.find_last_of('\\') + 1;
     }
+
+    string pre = path_str.substr(0, lb);
     string name = path_str.substr(lb, rb - lb);
     
     map<file, bool>thisfiles;
@@ -102,14 +104,15 @@ string verify(const bytevec& data, const string& path_str) {
     q.push({name, name});
     while (q.size()) {
         info item = q.front(); q.pop();
-        cerr << item.filename << endl;
+        cerr << "goto " << item.filename << endl;
         uint number_of_sons = 0;
         struct stat s_buf;
-        stat(item.path.c_str(), &s_buf);
+        string path = pre + item.path;
+        stat(path.c_str(), &s_buf);
         if (!S_ISDIR(s_buf.st_mode)) { // not a directory
             thisfiles[{item.path, '0'}] = 1;
 
-            ifstream fin(item.path, ios::binary);
+            ifstream fin(path, ios::binary);
             bytevec data = readfile(fin); // get data
             fin.close();
             if (!files.count({item.path, '0'})) {
@@ -124,7 +127,7 @@ string verify(const bytevec& data, const string& path_str) {
         else {
             DIR *dir = NULL;
             struct dirent *entry;
-            if ((dir = opendir(item.path.c_str())) == NULL) {
+            if ((dir = opendir(path.c_str())) == NULL) {
                 cerr << "Directory Open failed." << endl;
             }
             else {
